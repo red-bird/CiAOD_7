@@ -48,7 +48,6 @@ list<Process*> greedyActiveSelector(const list<Process*> &lst) {
 	/// <returns></returns>
 	list<Process*> selected;
 	selected.push_back(lst.front());
-	//int j = 1;
 	for (auto it = lst.begin(); it != lst.end(); it++)
 	{
 		if ((*it)->begin >= selected.back()->end)
@@ -74,11 +73,11 @@ int main()
 		lst.sort(cmp);
 		result = greedyActiveSelector(lst);
 		lst.clear();
-		lst.~list();
 		cout << "Multiplicity of process:\n";
 		for (auto it = result.begin(); it != result.end(); it++)
 		{
 			cout << (*it)->num << " process\n";
 		}
+		return 0;
 	}
 }
