@@ -10,7 +10,7 @@ struct Process
 };
 
 
-void readFile(list<Process*> &lst) {
+bool readFile(list<Process*> &lst) {
 	/// <summary>
 	/// Read data from "input.txt" file into your argument
 	/// </summary>
@@ -18,7 +18,10 @@ void readFile(list<Process*> &lst) {
 	string line;
 	ifstream input("input.txt");
 	if (!input.is_open())
-		cout << "Can't find input file\n";
+	{
+		cout << "Missing input file!\n";
+		return false;
+	}
 	else
 	{
 		int i = 0;
@@ -27,12 +30,18 @@ void readFile(list<Process*> &lst) {
 			++i;
 			Process* prc = new Process();
 			getline(input, line, ' ');
+			if (line.size()==0)
+			{
+				cout << "Input file is empty!\n";
+				return false;
+			}
 			prc->begin = stoi(line);
 			getline(input, line);
 			prc->end = stoi(line);
 			prc->num = i;
 			lst.push_back(prc);
 		}
+		return true;
 	}
 }
 
@@ -62,22 +71,17 @@ int main()
 {
 
 	list<Process*> lst, result;
-	readFile(lst);
-	if (lst.size() == 0)
+	if (!readFile(lst))
 	{
-		cout << "Input file is empty!\n";
 		return -1;
 	}
-	else
+	lst.sort(cmp);
+	result = greedyActiveSelector(lst);
+	lst.clear();
+	cout << "Multiplicity of process:\n";
+	for (auto it = result.begin(); it != result.end(); it++)
 	{
-		lst.sort(cmp);
-		result = greedyActiveSelector(lst);
-		lst.clear();
-		cout << "Multiplicity of process:\n";
-		for (auto it = result.begin(); it != result.end(); it++)
-		{
-			cout << (*it)->num << " process\n";
-		}
-		return 0;
+		cout << (*it)->num << " process\n";
 	}
+	return 0;
 }
